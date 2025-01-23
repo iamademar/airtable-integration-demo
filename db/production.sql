@@ -1,0 +1,4 @@
+CREATE DATABASE profile_api_production;
+CREATE DATABASE profile_api_production_cache;
+CREATE DATABASE profile_api_production_queue;
+CREATE DATABASE profile_api_production_cable;
