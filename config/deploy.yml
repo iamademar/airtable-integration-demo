@@ -119,11 +119,3 @@ accessories:
       interval: 5s
       timeout: 5s
       retries: 5
-
-# Add healthcheck for the web container
-healthcheck:
-  path: /up
-  port: 80
-  max_attempts: 10
-  interval: 5
-  timeout: 5
