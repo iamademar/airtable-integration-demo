@@ -2,7 +2,7 @@
 service: profile_api
 
 # Name of the container image.
-image: iamademar/referral_app_api
+image: iamademar/profile_api
 
 # Deploy to these servers.
 servers:
