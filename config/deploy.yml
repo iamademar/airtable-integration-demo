@@ -53,9 +53,9 @@ env:
     RAILS_LOG_LEVEL: debug
 
     # Add these database environment variables
-    POSTGRES_DB: profile_api_production
-    POSTGRES_USER: profile_api
-    DATABASE_URL: postgres://profile_api:${PROFILE_API_DATABASE_PASSWORD}@profile_api-db:5432/profile_api_production
+    # POSTGRES_DB: profile_api_production
+    # POSTGRES_USER: profile_api
+    # DATABASE_URL: postgres://profile_api:${PROFILE_API_DATABASE_PASSWORD}@profile_api-db:5432/profile_api_production
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.
