@@ -104,6 +104,7 @@ accessories:
         POSTGRES_DB: profile_api_production
       secret:
         - PROFILE_API_DATABASE_PASSWORD
+        - POSTGRES_PASSWORD
     files:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
     directories:
