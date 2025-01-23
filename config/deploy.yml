@@ -48,9 +48,6 @@ env:
     # Match this to any external database server to configure Active Record correctly
     # Use profile_api-db for a db accessory server on same machine via local kamal docker network.
     DB_HOST: profile_api-db
-    POSTGRES_USER: profile_api
-    POSTGRES_DB: profile_api_production
-    DB_PORT: 5432
 
     # Log everything from Rails
     RAILS_LOG_LEVEL: debug
@@ -103,8 +100,8 @@ accessories:
     port: "127.0.0.1:5432:5432"
     env:
       clear:
-        POSTGRES_USER: "${POSTGRES_USER}"
-        POSTGRES_DB: "${POSTGRES_DB}"
+        POSTGRES_USER: profile_api
+        POSTGRES_DB: profile_api_production
       secret:
         - PROFILE_API_DATABASE_PASSWORD
     files:
