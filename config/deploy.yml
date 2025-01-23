@@ -33,6 +33,7 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+    - PROFILE_API_DATABASE_PASSWORD
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
@@ -50,6 +51,11 @@ env:
 
     # Log everything from Rails
     RAILS_LOG_LEVEL: debug
+
+    # Add these database environment variables
+    POSTGRES_DB: profile_api_production
+    POSTGRES_USER: profile_api
+    DATABASE_URL: postgresql://profile_api:${PROFILE_API_DATABASE_PASSWORD}@profile_api-db:5432/profile_api_production
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.
@@ -107,3 +113,17 @@ accessories:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
     volumes:
       - "profile_api_db_data:/var/lib/postgresql/data"
+    # Add these lines to ensure DB is ready before web starts
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U profile_api"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+# Add healthcheck for the web container
+healthcheck:
+  path: /up
+  port: 80
+  max_attempts: 10
+  interval: 5
+  timeout: 5
