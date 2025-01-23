@@ -83,7 +83,10 @@ production:
     <<: *default
     database: profile_api_production
     username: profile_api
+    database: <%= ENV["POSTGRES_DB"] %>
     password: <%= ENV["PROFILE_API_DATABASE_PASSWORD"] %>
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV["DB_PORT"] %>
   cache:
     <<: *primary_production
     database: profile_api_production_cache
