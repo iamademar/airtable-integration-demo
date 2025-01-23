@@ -88,12 +88,18 @@ production:
   cache:
     <<: *primary_production
     database: profile_api_production_cache
+    username: profile_api
+    password: thisisas3cretpassword
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
     database: profile_api_production_queue
+    username: profile_api
+    password: thisisas3cretpassword
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
     database: profile_api_production_cable
+    username: profile_api
+    password: thisisas3cretpassword
     migrations_paths: db/cable_migrate
