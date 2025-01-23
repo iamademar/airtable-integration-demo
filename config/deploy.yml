@@ -55,7 +55,7 @@ env:
     # Add these database environment variables
     # POSTGRES_DB: profile_api_production
     # POSTGRES_USER: profile_api
-    DATABASE_URL: postgresql://profile_api:${PROFILE_API_DATABASE_PASSWORD}@profile_api-db:5432/profile_api_production
+    # DATABASE_URL: postgres://profile_api:${PROFILE_API_DATABASE_PASSWORD}@profile_api-db:5432/profile_api_production
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.
@@ -97,20 +97,20 @@ ssh:
   user: ubuntu
 
 # Use accessory services (secrets come from .kamal/secrets).
+
 accessories:
   db:
-    image: postgres:15
-    host: profile_api-db
-    port: 5432
+    image: postgres:16
+    host: 3.107.201.51
+    port: 127.0.0.1:5432:5432
     env:
       clear:
-        POSTGRES_HOST_AUTH_METHOD: trust
-        POSTGRES_DB: profile_api_production
+        MYSQL_ROOT_HOST: '%'
         POSTGRES_USER: profile_api
-        POSTGRES_PASSWORD: PROFILE_API_DATABASE_PASSWORD 
+        POSTGRES_DB: profile_api_production
       secret:
         - PROFILE_API_DATABASE_PASSWORD
     files:
-      - "config/postgresql/production.sql:/docker-entrypoint-initdb.d/10-init.sql"
-    volumes:
-      - "profile_api_db_data:/var/lib/postgresql/data"
+      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+    directories:
+      - data:/var/lib/postgresql/data
