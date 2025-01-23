@@ -113,9 +113,3 @@ accessories:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
     volumes:
       - "profile_api_db_data:/var/lib/postgresql/data"
-    # Add these lines to ensure DB is ready before web starts
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U profile_api"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
