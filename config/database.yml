@@ -84,8 +84,7 @@ production:
     database: profile_api_production
     username: profile_api
     password: thisisas3cretpassword
-    host: localhost
-    port: 5432
+    host: profile_api-db
   cache:
     <<: *primary_production
     database: profile_api_production_cache
