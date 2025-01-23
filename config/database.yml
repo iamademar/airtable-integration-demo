@@ -83,9 +83,9 @@ production:
     <<: *default
     database: profile_api_production
     username: profile_api
-    password: <%= ENV["PROFILE_API_DATABASE_PASSWORD"] %>
-    host: <%= ENV["DB_HOST"] %>
-    port: <%= ENV["DB_PORT"] %>
+    password: thisisas3cretpassword
+    host: 3.107.201.51
+    port: 5432
   cache:
     <<: *primary_production
     database: profile_api_production_cache
