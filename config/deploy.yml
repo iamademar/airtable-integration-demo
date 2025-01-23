@@ -47,7 +47,7 @@ env:
 
     # Match this to any external database server to configure Active Record correctly
     # Use profile_api-db for a db accessory server on same machine via local kamal docker network.
-    DB_HOST: profile_api-db
+    DB_HOST: localhost
 
     # Log everything from Rails
     RAILS_LOG_LEVEL: debug
