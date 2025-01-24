@@ -7,10 +7,10 @@ image: iamademar/profile_api
 # Deploy to these servers.
 servers:
   web:
-    - 13.55.46.35
+    - 3.107.185.68
   job:
     hosts:
-      - 13.55.46.35
+      - 3.107.185.68
     cmd: bin/jobs
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
@@ -96,7 +96,7 @@ ssh:
 accessories:
   db:
     image: postgres:15
-    host: 13.55.46.35
+    host: 3.107.185.68
     port: "127.0.0.1:5432:5432"
     env:
       clear:
