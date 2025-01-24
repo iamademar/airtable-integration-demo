@@ -6,12 +6,12 @@ class User < ApplicationRecord
                           content_type: { in: [ "application/pdf", "image/png", "image/jpeg" ], message: "must be a PDF or PNG" },
                           size: { less_than: 5.megabytes, message: "must be less than 5MB" }
 
-  after_commit :sync_to_airtable, on: :create
+  after_commit :schedule_airtable_sync, on: :create
 
   private
 
-    def sync_to_airtable
-      External::Airtable::UserRecord.create_from_user(self)
+    def schedule_airtable_sync
+      External::Airtable::SyncJob.perform_later(id)
     end
 
 end
