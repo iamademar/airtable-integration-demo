@@ -54,6 +54,6 @@ end
 gem "active_storage_validations"
 
 gem "airrecord"
-gem "aws-sdk-s3", "~> 1.124"
+gem "aws-sdk-s3", "~> 1.178"
 gem "image_processing", "~> 1.2"
 gem "rack-cors"
