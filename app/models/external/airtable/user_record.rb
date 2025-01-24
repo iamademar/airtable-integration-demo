@@ -17,13 +17,19 @@ class External::Airtable::UserRecord < Airrecord::Table
       } ]
     end
 
-    create(
+    if create(
       "First Name": user.first_name,
       "Last Name": user.last_name,
       "Email": user.email,
       "Date of Birth": user.date_of_birth.to_s,
       "File Uploaded": file_attachment
     )
+      user.update(synced_at: Time.current)
+      puts "================= SYNCED AT =================="
+      puts "synced_at changed from #{user.synced_at_before_last_save} to #{user.synced_at}"
+      puts "================= SYNCED AT =================="
+      true
+    end
   rescue Airrecord::Error => e
     Rails.logger.error "Failed to create Airtable record: #{e.message}"
     false

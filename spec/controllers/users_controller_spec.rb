@@ -59,4 +59,18 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
+  describe 'GET #index' do
+    let!(:user) { create(:user) }  # Assuming you have a factory for users
+
+    it 'returns a success response' do
+      get :index
+      expect(response).to be_successful
+    end
+
+    it 'returns all users' do
+      get :index
+      expect(JSON.parse(response.body).size).to eq(1)  # Adjust according to your database state
+    end
+  end
 end

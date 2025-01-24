@@ -8,6 +8,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def index
+    User.first.update(synced_at: Time.current)
+    @users = User.order(created_at: :desc)
+    render json: @users
+  end
+
   private
 
   def user_params

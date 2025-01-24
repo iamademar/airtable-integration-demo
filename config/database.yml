@@ -21,8 +21,15 @@ default: &default
 
 
 development:
-  <<: *default
-  database: profile_api_development
+  primary: &primary_development
+    <<: *default
+    database: profile_api_development
+  cache:
+    <<: *primary_development
+  queue:
+    <<: *primary_development
+  cable:
+    <<: *primary_development
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -87,22 +94,7 @@ production:
     host: <%= ENV["DB_HOST"] %>
   cache:
     <<: *primary_production
-    database: profile_api_production_cache
-    username: profile_api
-    password: thisisas3cretpassword
-    host: <%= ENV["DB_HOST"] %>
-    migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: profile_api_production_queue
-    username: profile_api
-    password: thisisas3cretpassword
-    host: <%= ENV["DB_HOST"] %>
-    migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: profile_api_production_cable
-    username: profile_api
-    password: thisisas3cretpassword
-    host: <%= ENV["DB_HOST"] %>
-    migrations_paths: db/cable_migrate

@@ -63,7 +63,12 @@ Rails.application.configure do
   config.action_view.annotate_rendered_view_with_filenames = true
 
   # Uncomment if you wish to allow Action Cable access from any origin.
-  # config.action_cable.disable_request_forgery_protection = true
+  config.action_cable.disable_request_forgery_protection = true
+  config.action_cable.logger = ActiveSupport::Logger.new(STDOUT)
+  config.action_cable.log_tags = [
+    :action_cable,
+    -> request { request.uuid }
+  ]
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
@@ -76,4 +81,7 @@ Rails.application.configure do
 
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :development } }
+
+  config.active_job.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  config.active_job.log_arguments = true
 end
