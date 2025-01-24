@@ -64,3 +64,5 @@ yarn-debug.log*
 *.sublime-workspace
 *.sublime-project
 .kamal/secrets
+spec/fixtures/files/*
+!spec/fixtures/files/.keep
