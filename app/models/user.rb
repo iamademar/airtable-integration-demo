@@ -17,6 +17,8 @@ class User < ApplicationRecord
     end
 
     def broadcast_new_user
+      puts "================= BROADCASTING NEW USER =================="
+      puts "Broadcasting new user: #{self.inspect}"
       ActionCable.server.broadcast "user_updates", {
         type: "new_user",
         user: {
@@ -32,22 +34,15 @@ class User < ApplicationRecord
     end
 
     def broadcast_sync_status
-      puts "================= BROADCASTING SYNC STATUS =================="
+      puts "================= BROADCASTING NEW USER =================="
       puts "Broadcasting sync status for user #{id}"
-      puts "synced_at changed from #{synced_at_before_last_save} to #{synced_at}"
-      puts "saved_change_to_synced_at?: #{saved_change_to_synced_at?}"
-
-      payload = {
+      ActionCable.server.broadcast("user_updates", {
         type: "sync_status_update",
         user: {
           id: id,
           synced_at: synced_at
         }
-      }
-      puts "Broadcasting payload: #{payload.inspect}"
-      result = ActionCable.server.broadcast("user_updates", payload)
-      puts "Broadcast result: #{result}"
-      puts "================= BROADCASTING SYNC STATUS =================="
+      })
     end
 
 end
