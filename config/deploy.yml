@@ -7,10 +7,10 @@ image: iamademar/profile_api
 # Deploy to these servers.
 servers:
   web:
-    - 3.107.185.68
+    - 3.25.174.84
   job:
     hosts:
-      - 3.107.185.68
+      - 3.25.174.84
     cmd: bin/jobs
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
@@ -19,7 +19,7 @@ servers:
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
   ssl: true
-  host: agilityautomationapi.ademartutor.com
+  host: agilityapi.ademartutor.com
 
 # Credentials for your image host.
 registry:
@@ -96,7 +96,7 @@ ssh:
 accessories:
   db:
     image: postgres:15
-    host: 3.107.185.68
+    host: 3.25.174.84
     port: "127.0.0.1:5432:5432"
     env:
       clear:
