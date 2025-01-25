@@ -1,17 +1,21 @@
-# Profile API
+# 👤 Profile API
 
 A Rails API application that manages user profiles with real-time updates and Airtable synchronization.
 
-## Tech Stack Overview
+---
 
-### Core Technologies
+## 🚀 Tech Stack Overview
+
+### 🔥 Core Technologies
+
 - **Ruby on Rails 8.0.1** (API-only mode)
 - **PostgreSQL** database
 - **Action Cable** for real-time updates
 - **Active Storage** with AWS S3 for file uploads
 
-### Key Gems
-```
+### 🌐 Key Gems
+
+```ruby
 gem "rails", "~> 8.0.1"
 gem "pg", "~> 1.1"
 gem "airrecord" # Airtable integration
@@ -22,11 +26,13 @@ gem "solid_cable" # Database-backed Action Cable
 gem "kamal" # Deployment
 ```
 
-### Database Configuration
+### 📊 Database Configuration
+
 The application uses multiple PostgreSQL databases for different purposes:
 
-Found on config/database.yml
-```
+Found in `config/database.yml`:
+
+```yaml
 production:
   primary: # Main application database
   cache: # For solid_cache
@@ -34,37 +40,45 @@ production:
   cable: # For solid_cable
 ```
 
-### Real-time Updates with Action Cable
-Action Cable is configured to handle real-time updates through the `UserUpdatesChannel` ([app/channels/user_updates_channel.rb](app/channels/user_updates_channel.rb)). It broadcasts:
-- New user creation
-- Airtable sync status updates
+### ⏳ Real-time Updates with Action Cable
 
+Action Cable is configured to handle real-time updates through the `UserUpdatesChannel` ([app/channels/user\_updates\_channel.rb](app/channels/user_updates_channel.rb)). It broadcasts:
 
-## Deployment
+- ✨ New user creation
+- 🔄 Airtable sync status updates
 
-### Prerequisites
+---
+
+## 🚜 Deployment
+
+### ✅ Prerequisites
+
 - An EC2 instance running Ubuntu
 - Docker installed on the server
 - PostgreSQL database
 - AWS S3 bucket configured
 
-### How to deploy with Kamal
+### 🏆 How to Deploy with Kamal
 
 The application is deployed using Kamal 2.0. Deployment configuration is defined in [config/deploy.yml](config/deploy.yml).
 
-1. Setup accesory first:
-```
+1. ⚙️ Setup accessory first:
+
+```bash
 bin/kamal accessory boot db
 ```
 
-2. Setup deploy app:
-```
+2. ⚖️ Deploy app:
+
+```bash
 bin/kamal deploy
 ```
 
-### Server Configuration
-Can be found on config/deploy.yml
-```
+### 🛠️ Server Configuration
+
+Found in `config/deploy.yml`:
+
+```yaml
 service: profile_api
   servers:
     web:
@@ -74,127 +88,141 @@ service: profile_api
       x.xxx.xxx.xx
 ```
 
-## Notable Feature Implementation
+---
 
-### User Data Synchronization with Airtable
+## 🔎 Notable Feature Implementation
+
+### 💳 User Data Synchronization with Airtable
 
 When a user is created, the following process occurs:
 
-1. User creation triggers an after_commit callback:
+1. ➕ **User creation triggers an **``** callback**:
 
-Found in app/models/user.rb
-```
-after_commit :schedule_airtable_sync, on: :create
-```
+   Found in `app/models/user.rb`:
 
-2. The sync job is queued:
+   ```ruby
+   after_commit :schedule_airtable_sync, on: :create
+   ```
 
-Found in app/jobs/external/airtable/sync_job.rb
-```
-class External::Airtable::SyncJob < ApplicationJob
-  def perform(user_id)
-    user = User.find(user_id)
-    External::Airtable::UserRecord.create_from_user(user)
-  end
-end
-```
+2. 💡 **The sync job is queued**:
 
-3. User data is synchronized with Airtable:
+   Found in `app/jobs/external/airtable/sync_job.rb`:
 
-Found in app/models/external/airtable/user_record.rb
-```
-def self.create_from_user(user)
-  create(
-    "First Name": user.first_name,
-    "Last Name": user.last_name,
-    "Email": user.email,
-    "Date of Birth": user.date_of_birth.to_s,
-    "File Uploaded": file_attachment
-  )
-end
-```
+   ```ruby
+   class External::Airtable::SyncJob < ApplicationJob
+     def perform(user_id)
+       user = User.find(user_id)
+       External::Airtable::UserRecord.create_from_user(user)
+     end
+   end
+   ```
 
-### Real-time Updates
+3. ✨ **User data is synchronized with Airtable**:
+
+   Found in `app/models/external/airtable/user_record.rb`:
+
+   ```ruby
+   def self.create_from_user(user)
+     create(
+       "First Name": user.first_name,
+       "Last Name": user.last_name,
+       "Email": user.email,
+       "Date of Birth": user.date_of_birth.to_s,
+       "File Uploaded": file_attachment
+     )
+   end
+   ```
+
+### 🔄 Real-time Updates
 
 The application uses Action Cable to broadcast user-related events:
 
-1. New User Creation:
+1. 📆 **New User Creation**:
 
-Found in app/models/user.rb
-```
-after_create_commit :broadcast_new_user
+   Found in `app/models/user.rb`:
 
-def broadcast_new_user
-  ActionCable.server.broadcast "user_updates", {
-    type: "new_user",
-    user: {
-      id: id,
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      date_of_birth: date_of_birth,
-      created_at: created_at,
-      synced_at: synced_at
-    }
-  }
-end
-```
+   ```ruby
+   after_create_commit :broadcast_new_user
 
-2. Sync Status Updates:
+   def broadcast_new_user
+     ActionCable.server.broadcast "user_updates", {
+       type: "new_user",
+       user: {
+         id: id,
+         first_name: first_name,
+         last_name: last_name,
+         email: email,
+         date_of_birth: date_of_birth,
+         created_at: created_at,
+         synced_at: synced_at
+       }
+     }
+   end
+   ```
 
-found on app/models/user.rb
-```
-after_update_commit :broadcast_sync_status, if: :saved_change_to_synced_at?
+2. 🎨 **Sync Status Updates**:
 
-def broadcast_sync_status
-  ActionCable.server.broadcast("user_updates", {
-      type: "sync_status_update",
-      user: {
-      id: id,
-      synced_at: synced_at
-    }
-  })
-end
-```
+   Found in `app/models/user.rb`:
 
+   ```ruby
+   after_update_commit :broadcast_sync_status, if: :saved_change_to_synced_at?
 
-Clients can subscribe to these updates through the UserUpdatesChannel:
+   def broadcast_sync_status
+     ActionCable.server.broadcast("user_updates", {
+       type: "sync_status_update",
+       user: {
+         id: id,
+         synced_at: synced_at
+       }
+     })
+   end
+   ```
 
-Found on app/channels/user_updates_channel.rb
-```
-  class UserUpdatesChannel < ApplicationCable::Channel
-    def subscribed
-      stream_from "user_updates"
-    end
+Clients can subscribe to these updates through the `UserUpdatesChannel`:
+
+Found in `app/channels/user_updates_channel.rb`:
+
+```ruby
+class UserUpdatesChannel < ApplicationCable::Channel
+  def subscribed
+    stream_from "user_updates"
   end
+end
 ```
 
-## Development Setup
+---
 
-1. Clone the repository
-2. Install dependencies:
+## 🔧 Development Setup
 
-```
-  bundle install
-```
+1. 🔗 **Clone the repository**
 
-3. Setup database:
+2. 📓 **Install dependencies**:
 
-```
-  bin/rails db:setup
-```
+   ```bash
+   bundle install
+   ```
 
-4. Start the server:
+3. 🔌 **Setup database**:
 
-```
-  bin/dev
-```
+   ```bash
+   bin/rails db:setup
+   ```
 
-## Environment Variables
+4. ⚙️ **Start the server**:
+
+   ```bash
+   bin/dev
+   ```
+
+---
+
+## ⚖️ Environment Variables
 
 The following environment variables need to be set:
+
 - `RAILS_MASTER_KEY`
 - `PROFILE_API_DATABASE_PASSWORD`
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AIRTABLE_API_KEY`
+
